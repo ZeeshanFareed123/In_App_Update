@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        Log.d("ImmediateUpdateActivity", "0")
         callInAppUpdate()
     }
 
@@ -29,12 +29,16 @@ class MainActivity : AppCompatActivity() {
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 try {
+                    Toast.makeText(this, "11", Toast.LENGTH_SHORT).show()
                     appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,
                         this, UPDATE_REQUEST_CODE)
                 }catch (e : IntentSender.SendIntentException){
                     e.printStackTrace()
                 }
             }
+        }.addOnFailureListener(){
+            Toast.makeText(this, "Resume"+ it, Toast.LENGTH_SHORT).show()
+            Log.d("ImmediateUpdateActivity", "Resume:$it")
         }
     }
 
@@ -44,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                 && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                     try {
+                        Toast.makeText(this, "22", Toast.LENGTH_SHORT).show()
                         appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,
                         this, UPDATE_REQUEST_CODE)
                     }catch (e : IntentSender.SendIntentException){
@@ -51,7 +56,8 @@ class MainActivity : AppCompatActivity() {
                     }
             }
         }.addOnFailureListener(){
-            Log.d("ImmediateUpdateActivity", "Failed to check for update:$it")
+            Toast.makeText(this, "Create"+ it, Toast.LENGTH_SHORT).show()
+            Log.d("ImmediateUpdateActivity", "Create:$it")
         }
     }
 
